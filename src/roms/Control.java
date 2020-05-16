@@ -21,12 +21,13 @@ import java.util.Random;
  *
  * @author Abdifatah Feisal
  */
-public class Manage {
-   
+public class Control {
+   //Generate number function
      public static int generateNum(int min, int max){
         Random rand = new Random();
         return min + rand.nextInt((max - min) + 1);
     }
+     //Autogenerate first user if system hasn't been run
     public void firstUser() {
         ObjectInputStream ois = null;
         try {
@@ -65,13 +66,17 @@ public class Manage {
         }
     
 }
+    //add customer function
     public void addCustomer(String password, String name, String address, String contact) {
+        //stores in an array list
         ArrayList<Customer> tempCustomer = new ArrayList<Customer>();
+        //read data type from inputstream
         ObjectInputStream ois = null;
         try {
             ois = new ObjectInputStream(new FileInputStream(new Login().getDataUser()));
             Object obj = null;
             while ((obj = ois.readObject()) != null) {
+                //adds customer
                 tempCustomer.add((Customer)obj);
             }
         } catch (EOFException ex) {}
@@ -85,7 +90,7 @@ public class Manage {
                 }
             } catch (IOException ex) { ex.printStackTrace(); }
         }
-        
+        //stores objects in to an output stream
         ObjectOutputStream oos = null;
         try {
             oos = new ObjectOutputStream(new FileOutputStream(new Login().getDataUser()));
@@ -99,7 +104,8 @@ public class Manage {
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
             Date date = new Date();
             customer.setCusDate(dateFormat.format(date));
-
+            //No duplication of id's
+            //compares new id and id's in file 
             boolean idExists = false;
             for(Customer eachCustomer:tempCustomer){
                 if(eachCustomer.getCusID().equals(customer.getCusID())) {

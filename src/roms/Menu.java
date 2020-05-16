@@ -166,8 +166,8 @@ public class Menu {
                     if(contact.equals("")) { contact="-"; }
                     if(contact.length() <= 16) {
                         new Login().clearConsole();
-                        Manage m = new Manage();
-                        m.addCustomer(password, name, address, contact);
+                        Control c = new Control();
+                        c.addCustomer(password, name, address, contact);
                     } else { System.out.println("\nIncorrect input!"); }
                 } else { System.out.println("\nIncorrect input!"); }
             } else { System.out.println("\nIncorrect input!"); }
@@ -185,7 +185,7 @@ public class Menu {
         System.out.println(">>> Please enter the customer ID number: ");
         id=scanner.nextLine().toUpperCase();
         L.clearConsole();
-        new Manage().searchCustomer(id);
+        new Control().searchCustomer(id);
         scanner.nextLine();
         L.clearConsole();
         customerManagement();
@@ -218,7 +218,7 @@ public class Menu {
                         if(contact.equals("")) {contact="-";}
                         if((contact.length() <= 16)) {
                             L.clearConsole();
-                            new Manage().editCustomer(id, password, name, address, contact);
+                            new Control().editCustomer(id, password, name, address, contact);
                         } else { System.out.println("\nIncorrect input!"); }
                     } else { System.out.println("\nIncorrect input!"); }
                 } else { System.out.println("\nIncorrect input!"); }
@@ -234,7 +234,7 @@ public class Menu {
     private void uiViewAllCustomers() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("\n---------------- VIEW ALL CUSTOMERS ----------------");
-        new Manage().viewCustomer();
+        new Control().viewCustomer();
         scanner.nextLine();
         L.clearConsole();
         customerManagement();

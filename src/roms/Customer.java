@@ -1,7 +1,7 @@
 package roms;
 
 import java.io.Serializable;
-
+//Serialization
 
 /**
  *
@@ -18,7 +18,8 @@ public class Customer implements Serializable{
     
     public Customer() {
     }
-    
+    //setters and getters
+    //uses ENCAPSULATION 
     public void setCusID(String cusID) {
         this.cusID = cusID;
     }

@@ -39,11 +39,12 @@ public class Login {
     }
       public void verifyLogin() {
         clearConsole();
-        new Manage().firstUser();
+        new Control().firstUser();
         Scanner scanner = new Scanner(System.in);
         while(true) {
             System.out.println("\n---------- RETAIL ORDER MANAGEMENT SYSTEM ----------\n");
             System.out.println(">>> Please enter your ID number: ");
+            //read customer data
             userID = scanner.nextLine().toUpperCase();
             boolean idFound = false;
             ObjectInputStream ois = null;
@@ -51,6 +52,7 @@ public class Login {
                 ois = new ObjectInputStream(new FileInputStream(getDataUser()));
                 Object obj = null;
                 while ((obj = ois.readObject()) != null) {
+                    //compare data from input to the one in the file
                     if (((Customer) obj).getCusID().equals(userID)) {
                         idFound = true;
                         userPassword = ((Customer) obj).getCusPassword();
@@ -93,6 +95,7 @@ public class Login {
             }
         }
     }
+     //delete customer menu
    public void uiDeleteCustomer() {
         String id=""; 
         Scanner scanner = new Scanner(System.in);
@@ -102,7 +105,7 @@ public class Login {
         id=scanner.nextLine().toUpperCase();
         if(!id.equals(userID)) {
             clearConsole();
-            new Manage().deleteCustomer(id);
+            new Control().deleteCustomer(id);
         } else { System.out.println("\nYou can not delete yourself!"); }
         scanner.nextLine();
         clearConsole();
