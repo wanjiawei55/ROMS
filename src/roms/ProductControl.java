@@ -17,9 +17,11 @@ import java.util.Scanner;
  *
  * @author JW Wan
  */
-public class ProductControl {
+public class ProductControl extends ObjectControl<Product>{
     
-    public static ArrayList<Product> productsFromFile()
+    // import Product data from file
+    @Override
+    ArrayList<Product> objectsFromFile()
     {
         File productFile = new File("ProductData.txt");
         ArrayList<Product> productList = new ArrayList<>();  
@@ -37,9 +39,11 @@ public class ProductControl {
         catch(IOException Ex) { }
         
         return productList;
-    }    
+    }   
     
-    private void product2File(ArrayList<Product> productList)
+    // export Product data from file
+    @Override
+    void objects2File(ArrayList<Product> productList)
     {
         File FInput = new File("ProductData.txt");
         try
@@ -66,7 +70,7 @@ public class ProductControl {
     
     public void addProduct(String name, double price, String type)
     {
-        ArrayList<Product> productList = productsFromFile();
+        ArrayList<Product> productList = objectsFromFile();
         
         String id = "P" + (Control.generateNum(1000, 9999));
         
@@ -87,9 +91,10 @@ public class ProductControl {
         {
             Product p = new Product(id, name, price, type);
             productList.add(p);
-            product2File(productList);
+            objects2File(productList);
 
-            System.out.println("\nProduct " + name + " is successfully added!");            
+            System.out.println("\nProduct " + name + " is successfully added!");
+            System.out.println("\nProduct ID: " + id);
         }
 
     }
@@ -97,7 +102,7 @@ public class ProductControl {
     
     public void viewProduct()
     {
-        ArrayList<Product> productList = productsFromFile();
+        ArrayList<Product> productList = objectsFromFile();
         
         int no = 0;
         for (Product eachProduct : productList)
@@ -114,7 +119,7 @@ public class ProductControl {
     
     public void editProduct(String id, String name, double price, String type)
     {
-        ArrayList<Product> productList = productsFromFile();
+        ArrayList<Product> productList = objectsFromFile();
         boolean edited = false;     
         
         for(Product eachProduct : productList)
@@ -138,14 +143,14 @@ public class ProductControl {
         }
         else if(edited == true)
         {        
-            product2File(productList);
+            objects2File(productList);
             System.out.println("\nProduct " + id + " is successfully updated!");            
         }
     }
 
     public void deleteProduct(String id)
     {
-        ArrayList<Product> productList = productsFromFile();
+        ArrayList<Product> productList = objectsFromFile();
         boolean deleted = false;
         
         for(Product eachProduct : productList)
@@ -157,7 +162,7 @@ public class ProductControl {
                 break;
             }
         }
-        product2File(productList);
+        objects2File(productList);
         
         if(deleted) System.out.println("\nProduct " + id + " is successfully deleted!");
         else    System.out.println("\nProduct " + id + " not found.");
@@ -166,7 +171,7 @@ public class ProductControl {
     
     public void searchProduct(String id)
     {
-        ArrayList<Product> productList = productsFromFile();
+        ArrayList<Product> productList = objectsFromFile();
         boolean found = false;
         
         for(Product eachProduct : productList)

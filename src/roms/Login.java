@@ -77,12 +77,12 @@ public class Login {
                     if(userType.equals("ADMIN")){
                         clearConsole();
                         System.out.print("Succesfully Logged in as an Admin\n");
-                        new Menu().mainMenuAdmin();
+                        new Menu().mainMenuAdmin(userID, userType);
                     } 
                     if(userType.equals("CUSTOMER")){
                         clearConsole();
                         System.out.print("Succesfully Logged in as a Customer\n");
-                        new Menu().OrderManagement(userID, userType);
+                        new Menu().orderManagement(userID, userType);
                     }
                     break;
                 } else {
@@ -94,23 +94,9 @@ public class Login {
                 System.out.println("The ID number is incorrect! (" + userID + ").");
             }
         }
-    }
-     //delete customer menu
-   public void uiDeleteCustomer() {
-        String id=""; 
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("\n----------------- DELETE CUSTOMER ------------------\n");
-        System.out.println("(Example: UID123456)");
-        System.out.println(">>> Please enter the customer ID number: ");
-        id=scanner.nextLine().toUpperCase();
-        if(!id.equals(userID)) {
-            clearConsole();
-            new Control().deleteCustomer(id);
-        } else { System.out.println("\nYou can not delete yourself!"); }
-        scanner.nextLine();
-        clearConsole();
-        new Menu().customerManagement();
-    }
+    }  
+      
+      
    public void clearConsole() {
         for (int i = 0; i < 50; ++i) {
             System.out.println();

@@ -76,6 +76,7 @@ public class Customer implements Serializable{
         return cusDate;
     }
 
+    @Override
     public String toString() {
         StringBuffer buffer = new StringBuffer();
         buffer.append("\n - USER ID:   ");
@@ -99,5 +100,3 @@ public class Customer implements Serializable{
     
 
 }
-
-

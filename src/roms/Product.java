@@ -32,6 +32,7 @@ public class Product {
         productType = type;
     }
     
+    @Override
     public String toString() {
     StringBuffer buffer = new StringBuffer();
     buffer.append("\n - PRODUCT ID:    ");

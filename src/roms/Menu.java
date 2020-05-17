@@ -12,10 +12,12 @@ public class Menu {
     
     static Scanner input = new Scanner(System.in);
     Login L = new Login();
-    
-    
-    public void  mainMenuAdmin()
+    private String userID, userType;
+ 
+    public void  mainMenuAdmin(String userID, String userType)
     {
+        this.userID = userID;
+        this.userType = userType;
         /***************************************************/
         System.out.println("------------------------------");
         System.out.println("Main Menu");
@@ -37,7 +39,7 @@ public class Menu {
                 break;
             case "3":
                 L.clearConsole();
-                OrderManagement("", "ADMIN");
+                orderManagement(userID, userType);
                 break;
             
             case "4":
@@ -46,7 +48,7 @@ public class Menu {
             default:
                 L.clearConsole();
                 System.out.println("Incorrect input! (" + selection + ").");
-                mainMenuAdmin();
+                mainMenuAdmin(userID, userType);
         }
        
             
@@ -76,7 +78,7 @@ public class Menu {
                 break;
             case "2":
                 L.clearConsole();
-                L.uiDeleteCustomer();
+                uiDeleteCustomer("UserID");
                 break;
             case "3":
                 L.clearConsole();
@@ -92,12 +94,12 @@ public class Menu {
                 break;    
             case "6":
                 L.clearConsole();
-                mainMenuAdmin();
+                mainMenuAdmin(userID, userType);
                 break;
             default:
                 L.clearConsole();
                 System.out.println("Incorrect input! (" + selection + ").");
-                mainMenuAdmin();
+                mainMenuAdmin(userID, userType);
         }
     }
     
@@ -141,19 +143,19 @@ public class Menu {
                 break;    
             case "6":
                 L.clearConsole();
-                mainMenuAdmin();
+                mainMenuAdmin(userID, userType);
                 break;
             default:
                 L.clearConsole();
                 System.out.println("Incorrect input! (" + selection + ").");
-                mainMenuAdmin();
+                mainMenuAdmin(userID, userType);
         }
     }
 
     // Display product management page
     // for ADMIN and CUSTOMER
 
-    public void OrderManagement(String customerID, String userType)
+    public void orderManagement(String customerID, String userType)
     {
         
         Scanner scanner = new Scanner(System.in);
@@ -193,12 +195,12 @@ public class Menu {
                 case "6":
                     L.clearConsole();
                     if(userType.equals("CUSTOMER"))     L.verifyLogin();
-                    else if(userType.equals("ADMIN"))   mainMenuAdmin();
+                    else if(userType.equals("ADMIN"))   mainMenuAdmin(userID, userType);
                     break;                        
                 default:
                     L.clearConsole();
                     System.out.println("Incorrect input! (" + getInput + ").");
-                    OrderManagement(customerID, userType);
+                    orderManagement(customerID, userType);
             }
         
     }
@@ -289,6 +291,23 @@ public class Menu {
         scanner.nextLine();
         L.clearConsole();
         customerManagement();
+    }
+    
+    //delete customer menu
+    public void uiDeleteCustomer(String userID) {
+        String id=""; 
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("\n----------------- DELETE CUSTOMER ------------------\n");
+        System.out.println("(Example: UID123456)");
+        System.out.println(">>> Please enter the customer ID number: ");
+        id=scanner.nextLine().toUpperCase();
+        if(!id.equals(userID)) {
+            L.clearConsole();
+            new Control().deleteCustomer(id);
+        } else { System.out.println("\nYou can not delete yourself!"); }
+        scanner.nextLine();
+        L.clearConsole();
+        new Menu().customerManagement();
     }
  
     
@@ -399,6 +418,8 @@ public class Menu {
     
     private void uiMakeOrder(String customerID, String userType)
     {
+        this.userID = customerID;
+        this.userType = userType;
         String pID = "0";
         int quantity = 0, count = 0;
         ArrayList<String> productIDs = new ArrayList<>();
@@ -409,7 +430,8 @@ public class Menu {
         ProductControl pc = new ProductControl();
         pc.viewProduct();
         System.out.println();
-            
+        
+        // try function to filter non-integer quantity
         try
         {
             System.out.println(">>> Please enter product ID (Enter 0 to complete order): ");
@@ -440,7 +462,7 @@ public class Menu {
             if(count>0)
             {
                 OrderControl c = new OrderControl();
-                c.makeOrder(customerID, productIDs, productQuantity);            
+                c.makeOrder(userID, productIDs, productQuantity);            
             }
             else    System.out.println("Order Unsuccesful.");           
         }
@@ -448,30 +470,25 @@ public class Menu {
         {
             System.out.println("\nInformation incorrect.");
             System.out.println("Order Unsuccesful."); 
-            scanner.nextLine();
         }
-        
-        
-
-
         
         scanner.nextLine();
         L.clearConsole();
-        OrderManagement(customerID, userType);
+        orderManagement(userID, userType);
     }
     
-    private void uiViewAllOrders(String customerID, String userType)
+    private void uiViewAllOrders(String userID, String userType)
     {
         Scanner scanner = new Scanner(System.in);
         System.out.println("\n---------------- VIEW ALL ORDERS ----------------");
-        new OrderControl().viewOrder(customerID, userType);
+        new OrderControl().viewOrder(userID, userType);
         
         scanner.nextLine();
         L.clearConsole();
-        OrderManagement(customerID, userType);        
+        orderManagement(userID, userType);        
     }
     
-    private void uiDeleteOrder(String customerID, String userType)
+    private void uiDeleteOrder(String userID, String userType)
     {
         String orderID; 
         Scanner scanner = new Scanner(System.in);
@@ -480,14 +497,14 @@ public class Menu {
         orderID = scanner.nextLine().toUpperCase();
         
         OrderControl c = new OrderControl();
-        c.deleteOrder(customerID, userType, orderID);
+        c.deleteOrder(userID, userType, orderID);
         
         scanner.nextLine();
         L.clearConsole();
-        OrderManagement(customerID, userType);
+        orderManagement(userID, userType);
     }
     
-    private void uiEditOrder(String customerID, String userType)
+    private void uiEditOrder(String userID, String userType)
     {
         String orderID, name, type;
         double price; 
@@ -497,14 +514,14 @@ public class Menu {
         orderID = scanner.nextLine().toUpperCase();
         
         OrderControl c = new OrderControl();
-        c.editOrder(customerID, userType, orderID);
+        c.editOrder(userID, userType, orderID);
         
         scanner.nextLine();
         L.clearConsole();
-        OrderManagement(customerID, userType);        
+        orderManagement(userID, userType);        
     }
     
-    private void uiSearchOrder(String customerID, String userType)
+    private void uiSearchOrder(String userID, String userType)
     {
         String orderID;
         Scanner scanner = new Scanner(System.in);
@@ -513,10 +530,10 @@ public class Menu {
         orderID = scanner.nextLine().toUpperCase();
         
         OrderControl c = new OrderControl();
-        c.searchOrder(customerID, userType, orderID);
+        c.searchOrder(userID, userType, orderID);
         
         scanner.nextLine();
         L.clearConsole();
-        OrderManagement(customerID, userType);
+        orderManagement(userID, userType);
     }
 }

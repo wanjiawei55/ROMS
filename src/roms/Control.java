@@ -52,9 +52,12 @@ public class Control {
                 System.out.println("PASSWORD:  " + customer.getCusPassword());
                 System.out.println("USER TYPE: " + customer.getCusType());
                 System.out.println("\nAuto-generated login credentials for new system!");
+                System.out.println(customer.getCusID());
                 customer=null;
                 oos.flush();
                 oos.close();
+                System.out.println("Check 1");
+
             } catch (Exception e) {}
         } catch (IOException ex) { ex.printStackTrace(); }
         finally {

@@ -20,8 +20,11 @@ import java.util.Scanner;
  *
  * @author JW Wan
  */
-public class OrderControl {
-    private ArrayList<Order> ordersFromFile()
+public class OrderControl extends ObjectControl<Order>{
+    
+    // import Order data from file
+    @Override
+    ArrayList<Order> objectsFromFile()
     {
         File orderFile = new File("OrderData.txt");
         ArrayList<Order> orderList = new ArrayList<>();  
@@ -62,7 +65,9 @@ public class OrderControl {
         return orderList;
     }
     
-    private void order2File(ArrayList<Order> orderList)
+    // export Order data to file
+    @Override
+    void objects2File(ArrayList<Order> orderList)
     {
         File FInput = new File("OrderData.txt");
         try
@@ -99,10 +104,10 @@ public class OrderControl {
         }
     }
     
-    // still need to make change for ADMIN
+    
     public void makeOrder(String cusID, ArrayList<String> productIDs, ArrayList<Integer> productQuantity)
     {
-        ArrayList<Order> orderList = ordersFromFile();
+        ArrayList<Order> orderList = objectsFromFile();
         String orderID, date;
         boolean orderIncomplete = false;
         ArrayList<String> confirmedProductID  = new ArrayList<>();
@@ -112,16 +117,16 @@ public class OrderControl {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         date = dateFormat.format(new Date());
         
-        ArrayList<Product> productList = ProductControl.productsFromFile();
+        ArrayList<Product> productList = new ProductControl().objectsFromFile();
         
-        boolean productExist, duplication, isZero;
+        boolean productExist, duplication, isZero; // to check if the product exist, no duplication and quantity > 0
         
         for(int i = 0; i<productIDs.size(); i++)
         {
             productExist = false;
             duplication = false;
             isZero = false;
-            String pID = productIDs.get(i); // productID to check if exist and duplicated
+            String pID = productIDs.get(i);         // productID to check if exist and duplicated
             int pQuantity = productQuantity.get(i); // quantity of product that is being checked
             if(pQuantity <= 0)   isZero = true;
 
@@ -162,7 +167,7 @@ public class OrderControl {
         {
             Order order = new Order(orderID, cusID, date, confirmedProductID, confirmedProductQuantity);
             orderList.add(order);
-            order2File(orderList);
+            objects2File(orderList);
 
             System.out.println("\nOrder Successful!");
             System.out.println(order);             
@@ -176,7 +181,7 @@ public class OrderControl {
     
     public void viewOrder(String customerID, String userType)
     {
-        ArrayList<Order> orderList = ordersFromFile();
+        ArrayList<Order> orderList = objectsFromFile();
         int count = 0;
         
         if(userType.equals("CUSTOMER"))
@@ -203,7 +208,7 @@ public class OrderControl {
     
     public void deleteOrder(String customerID, String userType, String orderID)
     {
-        ArrayList<Order> orderList = ordersFromFile();
+        ArrayList<Order> orderList = objectsFromFile();
         boolean deleted = false;
         
         for(Order order : orderList)
@@ -215,11 +220,10 @@ public class OrderControl {
                     orderList.remove(order);
                     deleted = true;
                     break;
-                }
-                    
+                }      
             }
         }
-        order2File(orderList);
+        objects2File(orderList);
         
         if(deleted) System.out.println("Order " + orderID + " is successfully deleted!");
         else System.out.println("Order " + orderID + " not found.");
@@ -228,13 +232,14 @@ public class OrderControl {
     public void editOrder(String customerID, String userType, String orderID)
     {
         Scanner scanner = new Scanner(System.in);
-        ArrayList<Order> orderList = ordersFromFile();
+        ArrayList<Order> orderList = objectsFromFile();
         boolean edited = false;
         
         for(Order order : orderList)
         {
             if(order.getOrderID().equals(orderID))
             {
+                // to check if Admin or the Customer who ordered is editing
                 if(userType.equals("ADMIN") || (userType.equals("CUSTOMER") && order.getCustomerID().equals(customerID)))
                 {
                     ArrayList<Product> productList = order.getProductList();
@@ -260,7 +265,7 @@ public class OrderControl {
                 }           
             }
         }
-        order2File(orderList);
+        objects2File(orderList);
         
         if(edited)  
         {
@@ -272,13 +277,14 @@ public class OrderControl {
     
     public void searchOrder(String customerID,String userType,String orderID)
     {
-        ArrayList<Order> orderList = ordersFromFile();
+        ArrayList<Order> orderList = objectsFromFile();
         boolean found = false;
         
         for(Order order : orderList)
         {
             if(order.getOrderID().equals(orderID))
             {
+                // to check if Admin or the Customer who ordered is searching
                 if(userType.equals("ADMIN") || (userType.equals("CUSTOMER") && order.getCustomerID().equals(customerID)))
                 {
                     System.out.println("\nOrder found.");
@@ -288,7 +294,7 @@ public class OrderControl {
                 }
             }
         }
-        order2File(orderList);
+        objects2File(orderList);
         
         if(!found) System.out.println("Order " + orderID + " not found.");        
     }

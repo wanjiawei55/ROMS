@@ -5,7 +5,6 @@
  */
 package roms;
 
-import java.util.Date;
 import java.util.ArrayList;
 
 /**
@@ -20,10 +19,10 @@ public class Order {
     private ArrayList<Product> productList = new ArrayList<>();
     private ArrayList<Integer> productQuantity = new ArrayList<>();
     
-    private int orderItemAmount;
-    private double productTotalPrice;
-    private double shippingFee;
-    private double orderTotalPrice;
+    private int orderItemAmount;        // total item amount purchased
+    private double productTotalPrice;   // subtotal
+    private double shippingFee;         // shipping & packaging cost
+    private double orderTotalPrice;     // order price in total
     
     public void setOrderID(String orderID) { this.orderID = orderID; }
     public String getOrderID() { return orderID; }
@@ -42,7 +41,7 @@ public class Order {
         this.orderedProductIDList = productIDs;
         
         // get products from file
-        ArrayList<Product> tempProductList = ProductControl.productsFromFile();
+        ArrayList<Product> tempProductList = new ProductControl().objectsFromFile();
         
         for(String id : productIDs) 
         {
@@ -59,6 +58,7 @@ public class Order {
         calculateOrder();
     }
     
+    // to calculate everything that needed calculation eg. itemAmount, totalPrice, shippingFee
     private void calculateOrder()
     {
         orderItemAmount = 0;
@@ -72,7 +72,7 @@ public class Order {
             quantity = productQuantity.get(productList.indexOf(eachProduct));
             productTotalPrice += eachProduct.getProductPrice() * quantity;
             
-            // packaging(shippingFee) cost $3 for each product, additional $5 for fragile item.
+            // packaging(shippingFee) cost $5 for each product, additional $3 for fragile item.
             shippingFee += 5 * quantity;
             if(eachProduct.getProductType().equals("Fragile"))  shippingFee += 3 * quantity;
             
@@ -82,6 +82,7 @@ public class Order {
         orderTotalPrice = productTotalPrice + shippingFee;
     }
     
+    @Override
     public String toString()
     {
         StringBuffer buffer = new StringBuffer();
@@ -118,8 +119,4 @@ public class Order {
         buffer.append("\n\n----------------------------------------------------");
         return buffer.toString();
     }
-    
-
-    
-    
 }
