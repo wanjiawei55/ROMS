@@ -1,4 +1,5 @@
 P2131,Red Pen,32.2,Non-Fragile
 P1234,Blue Pen,4.56,Fragile
-P1111,Water,9.99,Non-Fragile
-P2222,Glass,11,Fragile
+P1111,Book,31,Non-Fragile
+P2222,Book A,12.4,Non-Fragile
+P3333,eBook,5.99,Non-Fragile

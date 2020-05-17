@@ -257,10 +257,10 @@ public class Menu {
         String id="", name="", password="", address="", contact=""; 
         Scanner scanner = new Scanner(System.in);
         System.out.println("\n------------------- EDIT CUSTOMER ------------------\n");
-        System.out.println("(Example: UID123456)");
+        System.out.println("(Example: UID1234)");
         System.out.println(">>> Please enter the customer ID number: ");
         id=scanner.nextLine().toUpperCase();
-        if(id.length() == 9) {
+        if(id.length() == 7) {
             System.out.println("\n(Minimum 4 and maximum 12 characters!)");
             System.out.println(">>> Please enter the new name: ");
             name=scanner.nextLine().toUpperCase();
@@ -345,6 +345,7 @@ public class Menu {
         System.out.println("\n------------------- EDIT PRODUCT ------------------\n");
         System.out.println(">>> Please enter the product ID: ");
         id = scanner.nextLine().toUpperCase();
+        
         System.out.println(">>> Please enter new product name: ");
         name = scanner.nextLine();
         System.out.println(">>> Please enter new product price: ");
@@ -398,7 +399,7 @@ public class Menu {
     
     private void uiMakeOrder(String customerID, String userType)
     {
-        String pID = "-1";
+        String pID = "0";
         int quantity = 0, count = 0;
         ArrayList<String> productIDs = new ArrayList<>();
         ArrayList<Integer> productQuantity = new ArrayList<>();
@@ -407,40 +408,51 @@ public class Menu {
         
         ProductControl pc = new ProductControl();
         pc.viewProduct();
+        System.out.println();
             
-        System.out.println(">>> Please enter product ID (Enter -1 to complete order): ");
-        pID = scanner.nextLine().toUpperCase();
-        if(!pID.equals("-1".toUpperCase()))
+        try
         {
-            System.out.println(">>> Please enter quantity of the product: ");
-            quantity = scanner.nextInt();
-            scanner.nextLine();
-            count++;
-        }
-        
-        
-        while(!pID.equals("-1"))
-        {
-            productIDs.add(pID);
-            productQuantity.add(quantity);
-            
-            System.out.println(">>> Please enter product ID (Enter -1 to complete order): ");
+            System.out.println(">>> Please enter product ID (Enter 0 to complete order): ");
             pID = scanner.nextLine().toUpperCase();
-            if(!pID.equals("-1".toUpperCase()))
+            if(!pID.equals("0".toUpperCase()))
             {
                 System.out.println(">>> Please enter quantity of the product: ");
                 quantity = scanner.nextInt();
                 scanner.nextLine();
                 count++;
             }
+
+            while(!pID.equals("0"))
+            {
+                productIDs.add(pID);
+                productQuantity.add(quantity);
+
+                System.out.println(">>> Please enter product ID (Enter 0 to complete order): ");
+                pID = scanner.nextLine().toUpperCase();
+                if(!pID.equals("0".toUpperCase()))
+                {
+                    System.out.println(">>> Please enter quantity of the product: ");
+                    quantity = scanner.nextInt();
+                    scanner.nextLine();
+                    count++;
+                }
+            }
+            if(count>0)
+            {
+                OrderControl c = new OrderControl();
+                c.makeOrder(customerID, productIDs, productQuantity);            
+            }
+            else    System.out.println("Order Unsuccesful.");           
+        }
+        catch(Exception e)
+        {
+            System.out.println("\nInformation incorrect.");
+            System.out.println("Order Unsuccesful."); 
+            scanner.nextLine();
         }
         
-        if(count>0)
-        {
-            OrderControl c = new OrderControl();
-            c.makeOrder(customerID, productIDs, productQuantity);            
-        }
-        else    System.out.println("No order recorded.");
+        
+
 
         
         scanner.nextLine();

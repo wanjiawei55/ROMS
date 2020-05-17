@@ -56,7 +56,11 @@ public class Order {
         }
         this.productQuantity = pQuantity;
 
-        //calculateOrder();
+        calculateOrder();
+    }
+    
+    private void calculateOrder()
+    {
         orderItemAmount = 0;
         productTotalPrice = 0;
         shippingFee = 0;
@@ -73,27 +77,6 @@ public class Order {
             if(eachProduct.getProductType().equals("Fragile"))  shippingFee += 3 * quantity;
             
             orderItemAmount += quantity;
-        }
-        
-        orderTotalPrice = productTotalPrice + shippingFee;
-    }
-    
-    private void calculateOrder()
-    {
-        orderItemAmount = 0;
-        productTotalPrice = 0;
-        shippingFee = 0;
-        orderTotalPrice = 0;
-        
-        for(Product eachProduct : productList)
-        {
-            productTotalPrice += eachProduct.getProductPrice() * productQuantity.lastIndexOf(eachProduct);
-            
-            // packaging(shippingFee) cost $5 for each product, additional $5 for fragile item.
-            shippingFee += 5;
-            if(eachProduct.getProductType().equals("Fragile"))  shippingFee += 5;
-            
-            orderItemAmount += productQuantity.lastIndexOf(eachProduct);
         }
         
         orderTotalPrice = productTotalPrice + shippingFee;
@@ -122,13 +105,13 @@ public class Order {
             i++;
             buffer.append("\n   ").append(i).append(". ").append(eachProduct.getProductName()).append("\t\t\t").append(String.format("%4.2f", eachProduct.getProductPrice())).append("\t\t\t").append(productQuantity.get(productList.indexOf(eachProduct)));            
         }
-
+        
+        buffer.append("\n - TOTAL ITEMS:        ");
+        buffer.append(orderItemAmount);
         buffer.append("\n - SUBTOTAL($):        ");
         buffer.append(String.format("%4.2f", productTotalPrice));
         buffer.append("\n - SHIPPING FEE($):    ");
         buffer.append(String.format("%4.2f", shippingFee));
-        buffer.append("\n - TOTAL ITEMS:        ");
-        buffer.append(orderItemAmount);
         buffer.append("\n - TOTAL PRICE($):     ");
         buffer.append(String.format("%4.2f", orderTotalPrice));
         

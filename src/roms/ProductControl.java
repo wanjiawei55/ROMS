@@ -78,11 +78,20 @@ public class ProductControl {
                 break;
             }
         }
-        Product p = new Product(id, name, price, type);
-        productList.add(p);
-        product2File(productList);
         
-        System.out.println("\nProduct " + name + " is successfully added!");
+        if(id.isBlank() || name.isBlank() || type.isBlank())
+        {
+            System.out.println("\nInformation  incomplete.");
+        }
+        else
+        {
+            Product p = new Product(id, name, price, type);
+            productList.add(p);
+            product2File(productList);
+
+            System.out.println("\nProduct " + name + " is successfully added!");            
+        }
+
     }
     
     
@@ -110,7 +119,7 @@ public class ProductControl {
         
         for(Product eachProduct : productList)
         {
-            if(eachProduct.getProductID().equals(id))
+            if(eachProduct.getProductID().equals(id) && (!(id.isBlank() || name.isBlank() || type.isBlank())))
             {
                 eachProduct.setProductName(name);
                 eachProduct.setProductPrice(price);
@@ -118,14 +127,20 @@ public class ProductControl {
                 edited = true;
             }
         }
-        if(edited == false)
+
+        if(id.isBlank() || name.isBlank() || type.isBlank())
+        {
+            System.out.println("\nInformation incomplete.");
+        }
+        else if(edited == false)
         {
             System.out.println("\nProduct " + id + " not found!");
         }
-
-        product2File(productList);
-
-        System.out.println("\nProduct " + id + " is successfully updated!");
+        else if(edited == true)
+        {        
+            product2File(productList);
+            System.out.println("\nProduct " + id + " is successfully updated!");            
+        }
     }
 
     public void deleteProduct(String id)

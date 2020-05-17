@@ -104,17 +104,74 @@ public class OrderControl {
     {
         ArrayList<Order> orderList = ordersFromFile();
         String orderID, date;
+        boolean orderIncomplete = false;
+        ArrayList<String> confirmedProductID  = new ArrayList<>();
+        ArrayList<Integer> confirmedProductQuantity = new ArrayList<>();
                 
         orderID =  "O" + Integer.toString(Control.generateNum(10000, 99999));
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         date = dateFormat.format(new Date());
         
-        Order order = new Order(orderID, cusID, date, productIDs, productQuantity);
-        orderList.add(order);
-        order2File(orderList);
+        ArrayList<Product> productList = ProductControl.productsFromFile();
         
-        System.out.println("\nOrder Successful!");
-        System.out.println(order); 
+        boolean productExist, duplication, isZero;
+        
+        for(int i = 0; i<productIDs.size(); i++)
+        {
+            productExist = false;
+            duplication = false;
+            isZero = false;
+            String pID = productIDs.get(i); // productID to check if exist and duplicated
+            int pQuantity = productQuantity.get(i); // quantity of product that is being checked
+            if(pQuantity <= 0)   isZero = true;
+
+            for(Product product : productList)
+            {
+                if(product.getProductID().equals(pID))  productExist = true;
+            }
+            
+            for(String confirmedID : confirmedProductID)
+            {
+                if(confirmedID.equals(pID)) duplication = true;
+            }
+            
+            if(isZero)
+            {
+                System.out.println("Information incorrect. Quantity of product '" + pID + "' less than 1.");
+                orderIncomplete = true;
+            }
+            else if(productExist && !duplication)
+            {
+                confirmedProductID.add(pID);
+                confirmedProductQuantity.add(pQuantity);
+            }
+            else if(productExist && duplication)
+            {
+                int index = confirmedProductID.indexOf(pID);
+                int tempQ = confirmedProductQuantity.get(index);
+                confirmedProductQuantity.set(index, tempQ + pQuantity);
+            }
+            else
+            {
+                System.out.println("Product '" + pID + "' not found.");
+                orderIncomplete = true;
+            }
+        }
+
+        if(orderIncomplete == false)
+        {
+            Order order = new Order(orderID, cusID, date, confirmedProductID, confirmedProductQuantity);
+            orderList.add(order);
+            order2File(orderList);
+
+            System.out.println("\nOrder Successful!");
+            System.out.println(order);             
+        }
+        else
+        {
+            System.out.println("Order Unsuccessful.");
+        }
+
     }
     
     public void viewOrder(String customerID, String userType)
@@ -186,22 +243,31 @@ public class OrderControl {
                     {
                         System.out.println(">>> Please enter new quantity of the product '" 
                                 + product.getProductID() + "' " + product.getProductName() + ": ");
-                        int tempQuantity = scanner.nextInt();
-                        scanner.nextLine();
-                        
-                        int index = productList.indexOf(product);
-                        productQuantity.set(index, tempQuantity);
+                        try
+                        {
+                            int tempQuantity = scanner.nextInt();
+                            scanner.nextLine();          
+                            int index = productList.indexOf(product);
+                            productQuantity.set(index, tempQuantity);
+                            edited = true; 
+                        }
+                        catch(Exception Ex)
+                        {
+                            System.out.println("\nInformation incorrect.");
+                            return;
+                        }
                     }
-                    edited = true;
-                    break;
-                }
-                    
+                }           
             }
         }
         order2File(orderList);
         
-        if(edited)  System.out.println("Order " + orderID + " is successfully edited!");
-        else        System.out.println("Order " + orderID + " not found or edit unsuccess.");
+        if(edited)  
+        {
+            System.out.println("\nOrder " + orderID + " is successfully edited!");
+            System.out.println();
+        }
+        else    System.out.println("\nOrder " + orderID + " not found.");
     }
     
     public void searchOrder(String customerID,String userType,String orderID)

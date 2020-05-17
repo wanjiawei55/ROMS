@@ -76,12 +76,12 @@ public class Login {
                     System.out.println(" Your username is " + userID + " and pass is: " + userPassword);
                     if(userType.equals("ADMIN")){
                         clearConsole();
-                        System.out.print("Succesfully Logged in as an Admin");
+                        System.out.print("Succesfully Logged in as an Admin\n");
                         new Menu().mainMenuAdmin();
                     } 
                     if(userType.equals("CUSTOMER")){
                         clearConsole();
-                        System.out.print("Succesfully Logged in as a Customer");
+                        System.out.print("Succesfully Logged in as a Customer\n");
                         new Menu().OrderManagement(userID, userType);
                     }
                     break;
