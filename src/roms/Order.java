@@ -33,7 +33,8 @@ public class Order {
     public ArrayList<Integer> getProductQuantity() { return productQuantity; }
     
     
-    public Order(String orderID, String customerID, String orderDate, ArrayList<String> productIDs, ArrayList<Integer> pQuantity)
+    public Order(String orderID, String customerID, String orderDate,
+            ArrayList<String> productIDs, ArrayList<Integer> pQuantity)
     {
         this.orderID = orderID;
         this.orderDate = orderDate;

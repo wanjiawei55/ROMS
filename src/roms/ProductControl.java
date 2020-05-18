@@ -41,7 +41,7 @@ public class ProductControl extends ObjectControl<Product>{
         return productList;
     }   
     
-    // export Product data from file
+    // export Product data to file
     @Override
     void objects2File(ArrayList<Product> productList)
     {
@@ -72,7 +72,7 @@ public class ProductControl extends ObjectControl<Product>{
     {
         ArrayList<Product> productList = objectsFromFile();
         
-        String id = "P" + (Control.generateNum(1000, 9999));
+        String id = "P" + (Control.generateNum(1000, 9999));   // P####
         
         for(Product eachProduct : productList)
         {
